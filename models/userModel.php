@@ -57,6 +57,33 @@ function loginUser($conn, $email, $password) {
     }
 }
 
+//Forgetting password
+// 1. Get the security question for a specific email
+function getUserQuestion($conn, $email) {
+    $sql = "SELECT security_question FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
+    
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['security_question'];
+    } else {
+        return false; // Email not found
+    }
+}
+
+// 2. Check if the provided answer is correct
+function checkSecurityAnswer($conn, $email, $answer) {
+    // We check if a user exists with THIS email AND THIS answer
+    $sql = "SELECT id FROM users WHERE email = '$email' AND security_answer = '$answer'";
+    $result = mysqli_query($conn, $sql);
+    
+    if (mysqli_num_rows($result) > 0) {
+        return true; // Match found
+    } else {
+        return false; // Wrong answer
+    }
+}
+
 
 
 ?>
