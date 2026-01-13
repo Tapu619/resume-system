@@ -84,6 +84,12 @@ function checkSecurityAnswer($conn, $email, $answer) {
     }
 }
 
+// 3. Update the password
+function updatePassword($conn, $email, $new_password) {
+    $sql = "UPDATE users SET password = '$new_password' WHERE email = '$email'";
+    return mysqli_query($conn, $sql);
+}
+
 
 
 ?>
