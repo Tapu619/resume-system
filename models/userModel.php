@@ -41,4 +41,22 @@ function registerUser($conn, $fullname, $email, $phone, $dob, $password, $questi
     }
 }
 
+
+
+// Function 3: Login User
+// Explanation: We look for a user who matches BOTH the email AND the password.
+function loginUser($conn, $email, $password) {
+    $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+    $result = mysqli_query($conn, $sql);
+
+    // If we find exactly 1 user, login is successful
+    if (mysqli_num_rows($result) == 1) {
+        return mysqli_fetch_assoc($result); // Return the user's data array
+    } else {
+        return false; // Login failed
+    }
+}
+
+
+
 ?>
