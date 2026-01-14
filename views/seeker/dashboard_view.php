@@ -67,3 +67,37 @@
                     <?php echo ucfirst($resume['status']); ?>
                 </span>
             </p>
+
+             <?php if ($resume['status'] == 'reviewed' && $feedback): ?>
+                <div class="feedback-container">
+                    <h4>Review Results</h4>
+                    
+                    <div class="score-display">
+                        <div class="score-circle"><?php echo $feedback['score']; ?></div>
+                        <div>
+                            <div style="font-size: 1.2em; font-weight: bold;">Final Score / 100</div>
+                            <div style="color: #666; font-size: 0.9em;">Reviewed by: <?php echo $feedback['reviewer_name']; ?></div>
+                            <div style="color: #666; font-size: 0.9em;">Date: <?php echo date("M j, Y", strtotime($feedback['review_date'])); ?></div>
+                        </div>
+                    </div>
+
+                    <strong>Reviewer Comments:</strong>
+                    <div class="comment-box">
+                        "<?php echo nl2br($feedback['feedback_comments']); ?>"
+                    </div>
+                </div>
+            <?php elseif ($resume['status'] == 'pending'): ?>
+                <p style="color: #856404; font-style: italic; margin-top: 15px;">
+                    Your resume is currently in the queue. Please check back later for your score and feedback.
+                </p>
+            <?php endif; ?>
+            
+        </div>
+    <?php else: ?>
+        <p style="color: #777;">You have not uploaded a resume yet.</p>
+    <?php endif; ?>
+
+</div>
+
+</body>
+</html>
