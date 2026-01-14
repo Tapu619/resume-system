@@ -1,0 +1,37 @@
+/* General Layout */
+body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+.container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+/* Header & Navigation */
+.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+.user-info span { font-size: 1.1em; margin-right: 20px; color: #555; }
+
+/* Buttons */
+.btn-link { color: #007bff; text-decoration: none; font-weight: bold; margin-right: 15px; }
+.btn-link:hover { text-decoration: underline; }
+
+.btn-logout { background-color: #dc3545; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em; transition: 0.3s; }
+.btn-logout:hover { background-color: #c82333; }
+
+.btn-upload { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1em; }
+.btn-upload:hover { background-color: #218838; }
+
+/* Messages */
+.msg { padding: 12px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
+.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* Resume Status Section */
+.status-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+.badge { padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 0.85em; text-transform: uppercase; }
+.pending { background-color: #fff3cd; color: #856404; }
+.reviewed { background-color: #d4edda; color: #155724; }
+
+/* Feedback Section */
+.feedback-container { margin-top: 25px; border-top: 2px solid #eee; padding-top: 20px; }
+.score-display { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.score-circle { width: 70px; height: 70px; background: #007bff; color: white; font-size: 24px; font-weight: bold; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 10px rgba(0,123,255,0.3); }
+.comment-box { background: #fff; border-left: 5px solid #007bff; padding: 15px; background-color: #f1f8ff; font-style: italic; }
+
+/* File Row Layout */
+.file-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; }
