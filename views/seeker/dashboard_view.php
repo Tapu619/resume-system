@@ -38,3 +38,32 @@
             <button type="submit" class="btn-upload">Upload PDF</button>
         </form>
     </div>
+
+    <h3>Your Resume Status</h3>
+    
+    <?php if ($resume): ?>
+        <div class="status-box">
+            
+            <div class="file-row">
+                <div>
+                    <strong>Current File:</strong> 
+                    <a href="<?php echo $resume['file_path']; ?>" target="_blank" style="color: #007bff;">View PDF</a>
+                </div>
+
+                <form action="" method="POST" onsubmit="return confirm('Are you sure you want to delete this resume? This action cannot be undone.');" novalidate>
+                    <button type="submit" name="delete_resume_btn" style="background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                        Delete Resume
+                    </button>
+                </form>
+            </div>
+            
+            <p>
+                <strong>Upload Date:</strong> <?php echo date("F j, Y, g:i a", strtotime($resume['upload_date'])); ?>
+            </p>
+            
+            <p>
+                <strong>Status:</strong> 
+                <span class="badge <?php echo $resume['status']; ?>">
+                    <?php echo ucfirst($resume['status']); ?>
+                </span>
+            </p>
