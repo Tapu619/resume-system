@@ -1,43 +1,42 @@
 <?php
-// 1. Include the Model
+session_start();
+require_once '../config/db.php';
 require_once '../models/userModel.php';
 
-// 2. Initialize variables
-$error_msg = "";
-$success_msg = "";
-
-// 3. Check if the form was submitted
+// Handle AJAX Request
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register_btn'])) {
     
-    // 1. Get all inputs
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];              
-    $dob = $_POST['dob'];                  
-    $password = $_POST['password'];
-    $question = $_POST['security_question']; 
-    $answer = $_POST['security_answer'];     
-    $role = $_POST['role'];
+    // 1. Prepare JSON Header
+    header('Content-Type: application/json');
 
-    // 2. Validation
-    if (empty($full_name) || empty($email) || empty($password) || empty($answer)) {
-        $error_msg = "All fields are required.";
+    // 2. Collect & Validate Data
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $dob = $_POST['dob'];
+    $password = $_POST['password'];
+    $answer = trim($_POST['security_answer']);
+    $question = $_POST['security_question'] ?? ''; 
+    $role = $_POST['role'] ?? ''; 
+
+    if (empty($full_name) || empty($email) || empty($phone) || empty($dob) || empty($password) || empty($question) || empty($answer) || empty($role)) {
+        echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
+        exit;
     } 
     elseif (isEmailTaken($conn, $email)) {
-        $error_msg = "This email is already registered.";
+        echo json_encode(['status' => 'error', 'message' => 'This email is already registered.']);
+        exit;
     } 
     else {
-        // 3. Register with ALL new variables
-        $status = registerUser($conn, $full_name, $email, $phone, $dob, $password, $question, $answer, $role);
-        
-        if ($status) {
-            $success_msg = "Registration successful! You can now login.";
+        if (registerUser($conn, $full_name, $email, $phone, $dob, $password, $question, $answer, $role)) {
+            echo json_encode(['status' => 'success', 'message' => 'Registration successful! Redirecting...']);
+            exit;
         } else {
-            $error_msg = "Database Error: " . mysqli_error($conn);
+            echo json_encode(['status' => 'error', 'message' => 'Database error.']);
+            exit;
         }
     }
 }
 
-// 4. Load the View (pass the variables to it)
 include '../views/auth/register_view.php';
 ?>

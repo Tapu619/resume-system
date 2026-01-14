@@ -19,7 +19,7 @@ function isEmailTaken($conn, $email) {
 // Explanation: We take the form data and insert it directly into the database.
 function registerUser($conn, $fullname, $email, $phone, $dob, $password, $question, $answer, $role) {
     
-    // 1. Sanitize the inputs (Fixes the "pet's name" error)
+    // 1. Sanitize the inputs
     // This adds a backslash in front of quotes so SQL reads them as text, not code.
     $fullname = mysqli_real_escape_string($conn, $fullname);
     $email = mysqli_real_escape_string($conn, $email);
