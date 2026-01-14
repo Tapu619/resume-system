@@ -62,3 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['resume_pdf'])) {
         }
     }
 }
+
+// 2. Handle Resume Deletion
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_resume_btn'])) {
+    // Optional: You could unlink() (delete) the actual file here too
+    if (deleteResume($conn, $user_id)) {
+        $message = "Resume deleted successfully.";
+    } else {
+        $error = "Error: Could not delete resume.";
+    }
+}
