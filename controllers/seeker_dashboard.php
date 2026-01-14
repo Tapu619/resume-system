@@ -72,3 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_resume_btn'])) 
         $error = "Error: Could not delete resume.";
     }
 }
+
+// 3. Fetch Data
+$resume = getResumeByUserId($conn, $user_id);
+
+$feedback = null;
+if ($resume && $resume['status'] == 'reviewed') {
+    $feedback = getFeedbackByResumeId($conn, $resume['id']);
+}
+
+include '../views/seeker/dashboard_view.php';
+?>
