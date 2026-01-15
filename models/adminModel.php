@@ -37,6 +37,12 @@ function assignReviewer($conn, $resume_id, $reviewer_id) {
     return mysqli_query($conn, $sql);
 }
 
+// 5. Delete a User 
+function deleteUser($conn, $user_id) {
+    $sql = "DELETE FROM users WHERE id = '$user_id'";
+    return mysqli_query($conn, $sql);
+}
+
 
 
 ?>
