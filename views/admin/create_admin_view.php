@@ -55,3 +55,25 @@
         <p style="margin-top: 0; color: #666; font-size: 0.9em; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
             <strong>Warning:</strong> The user created here will have full access to manage users and assign resumes.
         </p>
+        
+        <form action="" method="POST" novalidate>
+            
+            <label>Full Name</label>
+            <input type="text" name="new_name" >
+
+            <label>Email Address</label>
+            <input type="email" name="new_email" >
+
+            <label>Password</label>
+            <input type="password" name="new_pass" >
+
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label>Phone Number</label>
+                    <input type="text" name="new_phone" >
+                </div>
+                <div style="flex: 1;">
+                    <label>Date of Birth</label>
+                    <input type="date" name="new_dob" >
+                </div>
+            </div>
