@@ -55,7 +55,7 @@
         <p style="margin-top: 0; color: #666; font-size: 0.9em; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
             <strong>Warning:</strong> The user created here will have full access to manage users and assign resumes.
         </p>
-        
+
         <form action="" method="POST" novalidate>
             
             <label>Full Name</label>
@@ -77,3 +77,25 @@
                     <input type="date" name="new_dob" >
                 </div>
             </div>
+
+            <label>Security Question</label>
+            <select name="new_question" >
+                <option value="What is your pet's name?">What is your pet's name?</option>
+                <option value="What city were you born in?">What city were you born in?</option>
+                <option value="What is your favorite color?">What is your favorite color?</option>
+            </select>
+
+            <label>Security Answer</label>
+            <input type="text" name="new_answer" placeholder="Answer for password recovery">
+
+            <button type="submit" name="create_admin_btn" class="btn-create">
+                Create Admin Account
+            </button>
+            
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
