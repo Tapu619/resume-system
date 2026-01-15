@@ -58,3 +58,23 @@
             width: 100%; 
             max-width: 200px;
         }
+
+        /* Action Buttons */
+        .btn-assign { 
+            background-color: #007bff; color: white; border: none; 
+            padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em; 
+        }
+        .btn-assign:hover { background-color: #0056b3; }
+
+        .btn-delete { 
+            background-color: #fff; color: #dc3545; border: 1px solid #dc3545; 
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em; 
+        }
+        .btn-delete:hover { background-color: #dc3545; color: white; }
+        
+        .role-badge {
+            display: inline-block; padding: 4px 8px; border-radius: 4px;
+            font-size: 0.8em; font-weight: bold; background: #e9ecef; color: #495057;
+        }
+    </style>
+</head>
