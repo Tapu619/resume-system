@@ -168,3 +168,31 @@
                             <?php echo ucfirst($resume['status']); ?>
                         </span>
                     </td>
+
+                    <form action="" method="POST" novalidate>
+                        <td>
+                            <input type="hidden" name="resume_id" value="<?php echo $resume['id']; ?>">
+                            
+                            <select name="reviewer_id" required>
+                                <option value="" disabled selected>Select Reviewer...</option>
+                                <?php foreach ($reviewers_list as $reviewer): ?>
+                                    <option value="<?php echo $reviewer['id']; ?>" 
+                                        <?php if($resume['assigned_to'] == $reviewer['id']) echo 'selected'; ?>>
+                                        <?php echo $reviewer['full_name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="assign_btn" class="btn-assign">Assign</button>
+                        </td>
+                    </form>
+                </tr>
+                <?php endforeach; ?>
+
+                <?php if(empty($all_resumes)): ?>
+                    <tr><td colspan="5" style="text-align: center; padding: 30px; color: #777;">No resumes uploaded yet.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
