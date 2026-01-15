@@ -91,5 +91,14 @@ function updatePassword($conn, $email, $new_password) {
 }
 
 
+//view Profile & update
+
+// 1. Fetch all user details by ID (for View Profile)
+function getUserById($conn, $id) {
+    $sql = "SELECT * FROM users WHERE id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_assoc($result);
+}
+
 
 ?>
