@@ -14,7 +14,13 @@ $error = "";
 
 // 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
-    
+    // Collect Inputs (using trim to remove extra spaces)
+    $name = trim($_POST['new_name']);
+    $email = trim($_POST['new_email']);
+    $pass = $_POST['new_pass'];
+    $phone = trim($_POST['new_phone']);
+    $dob = $_POST['new_dob'];
+    $ans = trim($_POST['new_answer']);
    
 }
 
