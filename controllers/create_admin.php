@@ -12,6 +12,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 $message = "";
 $error = "";
 
+// 2. Handle Form Submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
+    
+   
+}
+
 
 
 // 3. Load the View
