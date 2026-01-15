@@ -59,4 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) 
         }
     }
 }
+
+
+// Load View
+include '../views/reviewer/submit_review_view.php';
 ?>
