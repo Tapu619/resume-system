@@ -196,3 +196,55 @@
             </tbody>
         </table>
     </div>
+
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 50px; margin-bottom: 15px; border-left: 5px solid #007bff; padding-left: 10px;">
+        <h3 style="margin: 0; border: none; padding: 0;">User Management</h3>
+        
+        <a href="create_admin.php" style="background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9em;">
+            + Add New Admin
+        </a>
+    </div>
+    
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($all_users as $user): ?>
+                <tr>
+                    <td>#<?php echo $user['id']; ?></td>
+                    <td><strong><?php echo $user['full_name']; ?></strong></td>
+                    <td><?php echo $user['email']; ?></td>
+                    <td>
+                        <span class="role-badge">
+                            <?php echo strtoupper($user['role']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <?php if($user['role'] != 'admin'): ?>
+                        <form action="" method="POST" onsubmit="return confirm('Are you sure you want to delete this user? This will also delete their resumes and reviews.');" novalidate>
+                            <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                            <button type="submit" name="delete_user_btn" class="btn-delete">Delete User</button>
+                        </form>
+                        <?php else: ?>
+                            <span style="color: #999; font-size: 0.9em;">(System Admin)</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    
+    <br><br> </div>
+
+</body>
+</html>
