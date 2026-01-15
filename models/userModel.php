@@ -100,5 +100,16 @@ function getUserById($conn, $id) {
     return mysqli_fetch_assoc($result);
 }
 
+// 2. Update Profile Details (Name, Phone, DOB)
+function updateUserProfile($conn, $id, $full_name, $phone, $dob) {
+    // Sanitize first
+    $full_name = mysqli_real_escape_string($conn, $full_name);
+    $phone = mysqli_real_escape_string($conn, $phone);
+    $dob = mysqli_real_escape_string($conn, $dob);
+    
+    $sql = "UPDATE users SET full_name='$full_name', phone='$phone', dob='$dob' WHERE id='$id'";
+    return mysqli_query($conn, $sql);
+}
+
 
 ?>
