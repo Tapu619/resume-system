@@ -38,3 +38,20 @@
         .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
+<body>
+
+<div class="container">
+    
+    <a href="admin_dashboard.php" class="back-link">← Back to Dashboard</a>
+
+    <div class="header">
+        <h2>Add New System Administrator</h2>
+    </div>
+
+    <?php if ($message) echo "<div class='msg success'>$message</div>"; ?>
+    <?php if ($error) echo "<div class='msg error'>$error</div>"; ?>
+
+    <div class="form-card">
+        <p style="margin-top: 0; color: #666; font-size: 0.9em; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <strong>Warning:</strong> The user created here will have full access to manage users and assign resumes.
+        </p>
