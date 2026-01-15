@@ -31,3 +31,29 @@
                 </a>
             </p>
             <hr>
+
+            <form action="" method="POST" novalidate>
+                
+                <label style="font-weight: bold; display: block; margin-top: 20px;">Score (0 - 100):</label>
+                <input type="number" name="score" min="0" max="100" 
+                       style="width: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1em;">
+
+                <label style="font-weight: bold; display: block; margin-top: 20px;">Feedback Comments:</label>
+                <textarea name="comments" rows="6" 
+                          style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: sans-serif;"
+                          placeholder="Write your feedback here..."></textarea>
+
+                <button type="submit" name="submit_review_btn" 
+                        style="margin-top: 20px; width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em;">
+                    Submit Final Review
+                </button>
+
+            </form>
+        </div>
+
+    <?php endif; ?>
+
+</div>
+
+</body>
+</html>
