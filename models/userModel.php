@@ -111,5 +111,12 @@ function updateUserProfile($conn, $id, $full_name, $phone, $dob) {
     return mysqli_query($conn, $sql);
 }
 
+// 3. Change Password (for logged-in user)
+function changeUserPassword($conn, $id, $new_password) {
+    $new_password = mysqli_real_escape_string($conn, $new_password);
+    $sql = "UPDATE users SET password='$new_password' WHERE id='$id'";
+    return mysqli_query($conn, $sql);
+}
+
 
 ?>
