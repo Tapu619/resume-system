@@ -22,3 +22,19 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+         label { font-weight: bold; color: #555; }
+        .btn-create {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-create:hover { background-color: #218838; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
