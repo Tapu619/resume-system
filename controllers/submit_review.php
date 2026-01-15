@@ -27,4 +27,36 @@ if (isset($_GET['id'])) {
     exit;
 }
 
+// 2. Handle Form Submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) {
+    
+    // Collect inputs
+    $score = $_POST['score'];
+    $comments = trim($_POST['comments']);
+
+    // --- NEW VALIDATION CHECKS ---
+    
+    // Check if score is empty (Must check explicitly for empty string, because "0" is a valid score)
+    if ($score === "") {
+        $error = "Error: Please enter a score.";
+    }
+    // Check if comments are empty
+    elseif (empty($comments)) {
+        $error = "Error: Feedback comments cannot be empty.";
+    }
+    // Check range logic
+    elseif ($score < 0 || $score > 100) {
+        $error = "Error: Score must be between 0 and 100.";
+    } 
+    else {
+        // Validation Passed -> Submit Review
+        if (submitReview($conn, $resume_id, $reviewer_id, $score, $comments)) {
+            $message = "Review submitted successfully!";
+            // Refresh data to show updated status immediately
+            $resume_data['status'] = 'reviewed'; 
+        } else {
+            $error = "Database Error: Could not save review.";
+        }
+    }
+}
 ?>
