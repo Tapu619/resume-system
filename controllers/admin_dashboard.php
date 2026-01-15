@@ -44,3 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_user_btn'])) {
         $error = "Failed to delete user.";
     }
 }
+
+// 4. Fetch Data for the View
+$all_users = getAllUsers($conn);
+$all_resumes = getAllResumes($conn);
+$reviewers_list = getAllReviewers($conn);
