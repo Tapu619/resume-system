@@ -49,3 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_user_btn'])) {
 $all_users = getAllUsers($conn);
 $all_resumes = getAllResumes($conn);
 $reviewers_list = getAllReviewers($conn);
+
+
+
+// Get Stats
+$system_stats = getSystemStats($conn);
+
