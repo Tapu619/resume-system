@@ -11,3 +11,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 
 $message = "";
 $error = "";
+
+
+// 2. Handle Form: Assign Reviewer
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
+    $resume_id = $_POST['resume_id'];
+    
+    
+}
+
