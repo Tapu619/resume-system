@@ -25,7 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
     // Handle Dropdown safely (if nothing selected, default to empty string)
     $ques = $_POST['new_question'] ?? '';
  
-
+// --- NEW VALIDATION CHECK ---
+    // Check if ANY field is empty
+    if (empty($name) || empty($email) || empty($pass) || empty($phone) || empty($dob) || empty($ques) || empty($ans)) {
+        $error = "Error: All fields are required to create a new admin.";
+    } 
     
 }
 
