@@ -12,4 +12,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 $message = "";
 $error = "";
 
+
+
+// 3. Load the View
+include '../views/admin/create_admin_view.php';
+
 ?>
