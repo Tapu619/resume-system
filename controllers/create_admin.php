@@ -21,11 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
     $phone = trim($_POST['new_phone']);
     $dob = $_POST['new_dob'];
     $ans = trim($_POST['new_answer']);
-   
-}
-
+  
     // Handle Dropdown safely (if nothing selected, default to empty string)
     $ques = $_POST['new_question'] ?? '';
+ 
+}
 
 
 
