@@ -24,6 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
    
 }
 
+    // Handle Dropdown safely (if nothing selected, default to empty string)
+    $ques = $_POST['new_question'] ?? '';
+
 
 
 // 3. Load the View
