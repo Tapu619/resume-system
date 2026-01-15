@@ -13,4 +13,15 @@ function getAssignedResumes($conn, $reviewer_id) {
     $result = mysqli_query($conn, $sql);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+// 2. Get details of ONE specific resume (for the grading page)
+function getResumeDetails($conn, $resume_id) {
+    $sql = "SELECT resumes.*, users.full_name AS seeker_name 
+            FROM resumes 
+            JOIN users ON resumes.user_id = users.id 
+            WHERE resumes.id = '$resume_id'";
+            
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_assoc($result);
+}
 ?>
