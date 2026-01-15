@@ -19,3 +19,36 @@
         .back-link { display: block; margin-bottom: 20px; text-decoration: none; color: #333; font-weight: bold; }
     </style>
 </head>
+<body>
+
+    <?php 
+        $dashboard_link = "../controllers/login.php"; // Default fallback
+        if($_SESSION['role'] == 'job_seeker') $dashboard_link = "seeker_dashboard.php";
+        if($_SESSION['role'] == 'reviewer') $dashboard_link = "reviewer_dashboard.php";
+        if($_SESSION['role'] == 'admin') $dashboard_link = "admin_dashboard.php";
+    ?>
+    <a href="<?php echo $dashboard_link; ?>" class="back-link">← Back to Dashboard</a>
+
+    <?php if($success_msg) echo "<div class='alert success'>$success_msg</div>"; ?>
+    <?php if($error_msg) echo "<div class='alert error'>$error_msg</div>"; ?>
+
+    <div class="container">
+        
+        <div class="card">
+            <h2>Update Profile</h2>
+            <form action="" method="POST" novalidate>
+                <label>Full Name</label>
+                <input type="text" name="full_name" value="<?php echo $user['full_name']; ?>" required>
+
+                <label>Email (Cannot Change)</label>
+                <input type="email" value="<?php echo $user['email']; ?>" readonly>
+
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="<?php echo $user['phone']; ?>" required>
+
+                <label>Date of Birth</label>
+                <input type="date" name="dob" value="<?php echo $user['dob']; ?>" required>
+
+                <button type="submit" name="update_profile_btn" class="btn-update">Save Changes</button>
+            </form>
+        </div>
