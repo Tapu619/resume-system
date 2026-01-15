@@ -55,3 +55,6 @@ $reviewers_list = getAllReviewers($conn);
 // Get Stats
 $system_stats = getSystemStats($conn);
 
+// 5. Load View
+include '../views/admin/dashboard_view.php';
+?>
