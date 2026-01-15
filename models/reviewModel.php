@@ -24,4 +24,24 @@ function getResumeDetails($conn, $resume_id) {
     $result = mysqli_query($conn, $sql);
     return mysqli_fetch_assoc($result);
 }
+
+// 3. Submit the Review (Score + Comment)
+function submitReview($conn, $resume_id, $reviewer_id, $score, $comments) {
+    // Sanitize
+    $comments = mysqli_real_escape_string($conn, $comments);
+    $score = (int)$score;
+
+    // A. Insert into 'reviews' table
+    $sql_insert = "INSERT INTO reviews (resume_id, reviewer_id, score, feedback_comments) 
+                   VALUES ('$resume_id', '$reviewer_id', '$score', '$comments')";
+    
+    if (mysqli_query($conn, $sql_insert)) {
+        // B. Update 'resumes' table status to 'reviewed'
+        $sql_update = "UPDATE resumes SET status = 'reviewed' WHERE id = '$resume_id'";
+        mysqli_query($conn, $sql_update);
+        return true;
+    } else {
+        return false;
+    }
+}
 ?>
