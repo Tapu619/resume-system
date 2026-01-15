@@ -43,6 +43,36 @@ function deleteUser($conn, $user_id) {
     return mysqli_query($conn, $sql);
 }
 
+// 6. Create a New Admin Account
+function createAdminUser($conn, $full_name, $email, $password, $phone, $dob, $question, $answer) {
+    
+    // Check if email already exists
+    $check_sql = "SELECT id FROM users WHERE email = '$email'";
+    $check_result = mysqli_query($conn, $check_sql);
+    if(mysqli_num_rows($check_result) > 0) {
+        return "Email already exists.";
+    }
+
+    // Sanitize inputs
+    $full_name = mysqli_real_escape_string($conn, $full_name);
+    $email = mysqli_real_escape_string($conn, $email);
+    $password = mysqli_real_escape_string($conn, $password); // Plain text as requested
+    $phone = mysqli_real_escape_string($conn, $phone);
+    $dob = mysqli_real_escape_string($conn, $dob);
+    $question = mysqli_real_escape_string($conn, $question);
+    $answer = mysqli_real_escape_string($conn, $answer);
+
+    // Insert with role = 'admin'
+    $sql = "INSERT INTO users (full_name, email, password, phone, dob, security_question, security_answer, role) 
+            VALUES ('$full_name', '$email', '$password', '$phone', '$dob', '$question', '$answer', 'admin')";
+
+    if (mysqli_query($conn, $sql)) {
+        return true; // Success
+    } else {
+        return "Database Error: " . mysqli_error($conn);
+    }
+}
+
 
 
 ?>
