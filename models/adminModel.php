@@ -74,5 +74,34 @@ function createAdminUser($conn, $full_name, $email, $password, $phone, $dob, $qu
 }
 
 
+// 7. Get System Statistics (Total, Pending, Reviewed, Average Score)
+function getSystemStats($conn) {
+    $stats = [];
+
+    // Query 1: Counts from Resumes table
+    $sql_counts = "SELECT 
+                    COUNT(*) as total,
+                    SUM(CASE WHEN status = 'reviewed' THEN 1 ELSE 0 END) as reviewed,
+                    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending
+                   FROM resumes";
+    $result_counts = mysqli_query($conn, $sql_counts);
+    $row_counts = mysqli_fetch_assoc($result_counts);
+    
+    $stats['total'] = $row_counts['total'];
+    $stats['reviewed'] = $row_counts['reviewed'];
+    $stats['pending'] = $row_counts['pending'];
+
+    // Query 2: Average Score from Reviews table
+    $sql_avg = "SELECT AVG(score) as average FROM reviews";
+    $result_avg = mysqli_query($conn, $sql_avg);
+    $row_avg = mysqli_fetch_assoc($result_avg);
+
+    // Round to 1 decimal place (e.g., 85.5), default to 0 if no reviews yet
+    $stats['avg_score'] = $row_avg['average'] ? round($row_avg['average'], 1) : 0;
+
+    return $stats;
+}
+
+
 
 ?>
