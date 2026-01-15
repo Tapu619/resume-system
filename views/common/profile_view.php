@@ -52,3 +52,21 @@
                 <button type="submit" name="update_profile_btn" class="btn-update">Save Changes</button>
             </form>
         </div>
+
+        <div class="card">
+            <h2>Change Password</h2>
+            <form action="" method="POST" novalidate>
+                <label>New Password</label>
+                <input type="password" name="new_password" required>
+
+                <label>Confirm New Password</label>
+                <input type="password" name="confirm_password" required>
+
+                <button type="submit" name="change_pass_btn" class="btn-pass">Update Password</button>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>
