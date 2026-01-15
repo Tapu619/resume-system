@@ -14,6 +14,7 @@ $error = "";
 
 // 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
+    
     // Collect Inputs (using trim to remove extra spaces)
     $name = trim($_POST['new_name']);
     $email = trim($_POST['new_email']);
@@ -21,21 +22,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_admin_btn'])) {
     $phone = trim($_POST['new_phone']);
     $dob = $_POST['new_dob'];
     $ans = trim($_POST['new_answer']);
-  
+    
     // Handle Dropdown safely (if nothing selected, default to empty string)
     $ques = $_POST['new_question'] ?? '';
- 
-// --- NEW VALIDATION CHECK ---
+
+    // --- NEW VALIDATION CHECK ---
     // Check if ANY field is empty
     if (empty($name) || empty($email) || empty($pass) || empty($phone) || empty($dob) || empty($ques) || empty($ans)) {
         $error = "Error: All fields are required to create a new admin.";
     } 
-    
+    else {
+        // Validation Passed -> Call Model Function
+        $result = createAdminUser($conn, $name, $email, $pass, $phone, $dob, $ques, $ans);
+
+        if ($result === true) {
+            $message = "Success! New Admin account created.";
+        } else {
+            $error = $result; // Show specific error (e.g., "Email exists")
+        }
+    }
 }
-
-
 
 // 3. Load the View
 include '../views/admin/create_admin_view.php';
-
 ?>
