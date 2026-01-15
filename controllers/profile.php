@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn']))
     } 
     // Validation 2: Check if data is actually different
     elseif ($full_name == $user['full_name'] && $phone == $user['phone'] && $dob == $user['dob']) {
-        $error_msg = "No changes were made to your profile."; // Not an error, but using the red box for visibility
+        $error_msg = "No changes were made to your profile."; 
     }
     else {
         // 3. Update Database
