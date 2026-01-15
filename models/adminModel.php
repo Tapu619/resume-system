@@ -8,6 +8,22 @@ function getAllUsers($conn) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+// 2. Get All Resumes (Joined with User Info so we know WHO uploaded it)
+function getAllResumes($conn) {
+    // We join 'resumes' with 'users' to get the Job Seeker's Name
+    // We also join with 'users' AGAIN (as 'reviewer') to see who is currently assigned
+    $sql = "SELECT resumes.*, 
+                   seeker.full_name AS seeker_name, 
+                   reviewer.full_name AS reviewer_name 
+            FROM resumes 
+            JOIN users AS seeker ON resumes.user_id = seeker.id
+            LEFT JOIN users AS reviewer ON resumes.assigned_to = reviewer.id
+            ORDER BY resumes.upload_date DESC";
+            
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 
 
 ?>
