@@ -38,5 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_user_btn'])) {
     $user_id_to_delete = $_POST['user_id'];
     
-    
+    if (deleteUser($conn, $user_id_to_delete)) {
+        $message = "User deleted successfully.";
+    } else {
+        $error = "Failed to delete user.";
+    }
 }
