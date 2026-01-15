@@ -24,6 +24,13 @@ function getAllResumes($conn) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+// 3. Get list of ONLY Reviewers (for the dropdown menu)
+function getAllReviewers($conn) {
+    $sql = "SELECT * FROM users WHERE role = 'reviewer'";
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 
 
 ?>
