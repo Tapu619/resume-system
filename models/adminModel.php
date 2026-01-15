@@ -31,6 +31,12 @@ function getAllReviewers($conn) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+// 4. Assign a Resume to a Reviewer
+function assignReviewer($conn, $resume_id, $reviewer_id) {
+    $sql = "UPDATE resumes SET assigned_to = '$reviewer_id' WHERE id = '$resume_id'";
+    return mysqli_query($conn, $sql);
+}
+
 
 
 ?>
