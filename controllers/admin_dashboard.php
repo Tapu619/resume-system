@@ -34,3 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     
 }
 
+// 3. Handle Form: Delete User
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_user_btn'])) {
+    $user_id_to_delete = $_POST['user_id'];
+    
+    
+}
