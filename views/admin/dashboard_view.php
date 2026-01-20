@@ -168,3 +168,83 @@
                             <?php echo ucfirst($resume['status']); ?>
                         </span>
                     </td>
+
+                    <form action="" method="POST" novalidate>
+                        <td>
+                            <input type="hidden" name="resume_id" value="<?php echo $resume['id']; ?>">
+                            
+                            <select name="reviewer_id" required>
+                                <option value="" disabled selected>Select Reviewer...</option>
+                                <?php foreach ($reviewers_list as $reviewer): ?>
+                                    <option value="<?php echo $reviewer['id']; ?>" 
+                                        <?php if($resume['assigned_to'] == $reviewer['id']) echo 'selected'; ?>>
+                                        <?php echo $reviewer['full_name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="assign_btn" class="btn-assign">Assign</button>
+                        </td>
+                    </form>
+                </tr>
+                <?php endforeach; ?>
+
+                <?php if(empty($all_resumes)): ?>
+                    <tr><td colspan="5" style="text-align: center; padding: 30px; color: #777;">No resumes uploaded yet.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 50px; margin-bottom: 15px; border-left: 5px solid #007bff; padding-left: 10px;">
+        <h3 style="margin: 0; border: none; padding: 0;">User Management</h3>
+        
+        <a href="create_admin.php" style="background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9em;">
+            + Add New Admin
+        </a>
+    </div>
+    
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($all_users as $user): ?>
+                
+                <tr id="row_<?php echo $user['id']; ?>">
+                    
+                    <td>#<?php echo $user['id']; ?></td>
+                    <td><strong><?php echo $user['full_name']; ?></strong></td>
+                    <td><?php echo $user['email']; ?></td>
+                    <td>
+                        <span class="role-badge">
+                            <?php echo strtoupper($user['role']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <?php if($user['role'] != 'admin'): ?>
+                            <button class="btn-delete" onclick="deleteUserAjax(<?php echo $user['id']; ?>)">
+                                Delete User
+                            </button>
+                        <?php else: ?>
+                            <span style="color: #999; font-size: 0.9em;">(System Admin)</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    
+    <br><br> 
+
+</div>
