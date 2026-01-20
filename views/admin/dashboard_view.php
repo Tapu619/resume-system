@@ -78,3 +78,57 @@
         }
     </style>
 </head>
+<body>
+
+<div class="container" style="max-width: 1100px;">
+    
+    <div class="header">
+        <h2>Admin Panel</h2>
+        <div class="user-info">
+            <span>Welcome, <strong><?php echo $_SESSION['full_name']; ?></strong></span>
+            <a href="profile.php" class="btn-link">My Profile</a>
+            <a href="logout.php" class="btn-logout">Logout</a>
+        </div>
+    </div>
+
+    <?php if ($message): ?>
+        <div class="msg success"><?php echo $message; ?></div>
+    <?php endif; ?>
+    
+    <?php if ($error): ?>
+        <div class="msg error"><?php echo $error; ?></div>
+    <?php endif; ?>
+
+
+    <div style="display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap;">
+        
+        <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.9em; opacity: 0.9;">Average Resume Score</div>
+            <div style="font-size: 2.5em; font-weight: bold; margin-top: 10px;">
+                <?php echo $system_stats['avg_score']; ?>
+            </div>
+            <div style="font-size: 0.8em; opacity: 0.8;">Out of 100</div>
+        </div>
+
+        <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #007bff;">
+            <div style="color: #666; font-size: 0.9em; font-weight: bold;">TOTAL UPLOADS</div>
+            <div style="font-size: 2em; font-weight: bold; color: #333; margin-top: 5px;">
+                <?php echo $system_stats['total']; ?>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #28a745;">
+            <div style="color: #666; font-size: 0.9em; font-weight: bold;">REVIEWED</div>
+            <div style="font-size: 2em; font-weight: bold; color: #28a745; margin-top: 5px;">
+                <?php echo $system_stats['reviewed']; ?>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #ffc107;">
+            <div style="color: #666; font-size: 0.9em; font-weight: bold;">PENDING</div>
+            <div style="font-size: 2em; font-weight: bold; color: #ffc107; margin-top: 5px;">
+                <?php echo $system_stats['pending']; ?>
+            </div>
+        </div>
+
+    </div>
