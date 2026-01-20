@@ -12,12 +12,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 $message = "";
 $error = "";
 
-
-// 2. Handle Form: Assign Reviewer
+// 2. Handle Form: Assign Reviewer (We keep this because it's not AJAX yet)
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     $resume_id = $_POST['resume_id'];
-
-     // --- VALIDATION FIX ---
+    
     // Check if a reviewer was actually selected
     if (!isset($_POST['reviewer_id']) || empty($_POST['reviewer_id'])) {
         $error = "Error: You must select a reviewer from the list.";
@@ -31,30 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
             $error = "Failed to assign reviewer.";
         }
     }
-    
 }
 
-// 3. Handle Form: Delete User
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_user_btn'])) {
-    $user_id_to_delete = $_POST['user_id'];
-    
-    if (deleteUser($conn, $user_id_to_delete)) {
-        $message = "User deleted successfully.";
-    } else {
-        $error = "Failed to delete user.";
-    }
-}
 
 // 4. Fetch Data for the View
 $all_users = getAllUsers($conn);
 $all_resumes = getAllResumes($conn);
 $reviewers_list = getAllReviewers($conn);
 
-
-
 // Get Stats
 $system_stats = getSystemStats($conn);
 
 // 5. Load View
-include '../views/admin/dashboard_view.php';
+// Make sure this filename matches your actual view file (admin_dashboard_view.php)
+include '../views/admin/dashboard_view.php'; 
 ?>
