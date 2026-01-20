@@ -3,8 +3,6 @@ require_once '../config/db.php';
 
 // 1. Save file path to database
 function uploadResume($conn, $user_id, $file_path) {
-    // Check if user already uploaded one (Optional: delete old one or block upload)
-    // For simplicity, we just insert a new one.
     $sql = "INSERT INTO resumes (user_id, file_path, status) VALUES ('$user_id', '$file_path', 'pending')";
     return mysqli_query($conn, $sql);
 }
@@ -19,17 +17,28 @@ function getResumeByUserId($conn, $user_id) {
 
 // 3. Get Feedback (Reviewer Comments & Score)
 function getFeedbackByResumeId($conn, $resume_id) {
-    // We Join with 'users' table to get the Reviewer's Name
-    $sql = "SELECT reviews.*, users.full_name as reviewer_name 
-            FROM reviews 
-            JOIN users ON reviews.reviewer_id = users.id 
-            WHERE reviews.resume_id = '$resume_id'";
-            
+    
+    // Step 1: Get the review details from the 'reviews' table
+    $sql = "SELECT * FROM reviews WHERE resume_id = '$resume_id'";
     $result = mysqli_query($conn, $sql);
-    return mysqli_fetch_assoc($result);
+    $review = mysqli_fetch_assoc($result);
+
+    // Step 2: If a review exists, find the Reviewer's Name
+    if ($review) {
+        $reviewer_id = $review['reviewer_id'];
+        
+        // Simple query to find the reviewer's name
+        $sql_user = "SELECT full_name FROM users WHERE id = '$reviewer_id'";
+        $result_user = mysqli_query($conn, $sql_user);
+        $user_data = mysqli_fetch_assoc($result_user);
+        
+        // Add the name to our review array
+        $review['reviewer_name'] = $user_data['full_name'];
+    }
+
+    return $review;
 }
 
-// ... existing functions ...
 
 // 4. Delete Resume
 function deleteResume($conn, $user_id) {

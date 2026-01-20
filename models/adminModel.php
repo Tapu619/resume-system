@@ -8,20 +8,45 @@ function getAllUsers($conn) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-// 2. Get All Resumes (Joined with User Info so we know WHO uploaded it)
+// 2. Get All Resumes
 function getAllResumes($conn) {
-    // We join 'resumes' with 'users' to get the Job Seeker's Name
-    // We also join with 'users' AGAIN (as 'reviewer') to see who is currently assigned
-    $sql = "SELECT resumes.*, 
-                   seeker.full_name AS seeker_name, 
-                   reviewer.full_name AS reviewer_name 
-            FROM resumes 
-            JOIN users AS seeker ON resumes.user_id = seeker.id
-            LEFT JOIN users AS reviewer ON resumes.assigned_to = reviewer.id
-            ORDER BY resumes.upload_date DESC";
-            
+    
+    // Step 1: Just get all the raw resume data first
+    $sql = "SELECT * FROM resumes ORDER BY upload_date DESC";
     $result = mysqli_query($conn, $sql);
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    
+    // Fetch all rows into an array
+    $resumes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
+    // Step 2: Loop through the list and find names manually
+    foreach ($resumes as &$resume) {
+
+        // --- A. Get the Job Seeker's Name ---
+        $seeker_id = $resume['user_id'];
+        $sql1 = "SELECT full_name FROM users WHERE id = '$seeker_id'";
+        $res1 = mysqli_query($conn, $sql1);
+        $seeker_data = mysqli_fetch_assoc($res1);
+        
+        // Add the name to our list
+        $resume['seeker_name'] = $seeker_data['full_name'];
+
+
+        // --- B. Get the Reviewer's Name (If one is assigned) ---
+        if (!empty($resume['assigned_to'])) {
+            $reviewer_id = $resume['assigned_to'];
+            $sql2 = "SELECT full_name FROM users WHERE id = '$reviewer_id'";
+            $res2 = mysqli_query($conn, $sql2);
+            $reviewer_data = mysqli_fetch_assoc($res2);
+            
+            $resume['reviewer_name'] = $reviewer_data['full_name'];
+        } 
+        else {
+            $resume['reviewer_name'] = "Not Assigned";
+        }
+    }
+
+    return $resumes;
 }
 
 // 3. Get list of ONLY Reviewers (for the dropdown menu)
@@ -37,11 +62,13 @@ function assignReviewer($conn, $resume_id, $reviewer_id) {
     return mysqli_query($conn, $sql);
 }
 
-// 5. Delete a User 
+// 5. Delete a User
 function deleteUser($conn, $user_id) {
     $sql = "DELETE FROM users WHERE id = '$user_id'";
     return mysqli_query($conn, $sql);
 }
+
+
 
 // 6. Create a New Admin Account
 function createAdminUser($conn, $full_name, $email, $password, $phone, $dob, $question, $answer) {
@@ -56,7 +83,7 @@ function createAdminUser($conn, $full_name, $email, $password, $phone, $dob, $qu
     // Sanitize inputs
     $full_name = mysqli_real_escape_string($conn, $full_name);
     $email = mysqli_real_escape_string($conn, $email);
-    $password = mysqli_real_escape_string($conn, $password); // Plain text as requested
+    $password = mysqli_real_escape_string($conn, $password);
     $phone = mysqli_real_escape_string($conn, $phone);
     $dob = mysqli_real_escape_string($conn, $dob);
     $question = mysqli_real_escape_string($conn, $question);
@@ -74,30 +101,46 @@ function createAdminUser($conn, $full_name, $email, $password, $phone, $dob, $qu
 }
 
 
-// 7. Get System Statistics (Total, Pending, Reviewed, Average Score)
+// 7. Get System Statistics 
 function getSystemStats($conn) {
     $stats = [];
 
-    // Query 1: Counts from Resumes table
-    $sql_counts = "SELECT 
-                    COUNT(*) as total,
-                    SUM(CASE WHEN status = 'reviewed' THEN 1 ELSE 0 END) as reviewed,
-                    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending
-                   FROM resumes";
-    $result_counts = mysqli_query($conn, $sql_counts);
-    $row_counts = mysqli_fetch_assoc($result_counts);
+    // Query 1: Get TOTAL number of resumes
+    // "Count everything in the resumes table"
+    $sql1 = "SELECT COUNT(*) as count FROM resumes";
+    $result1 = mysqli_query($conn, $sql1);
+    $row1 = mysqli_fetch_assoc($result1);
+    $stats['total'] = $row1['count'];
+
+
+    // Query 2: Get REVIEWED resumes
+    // "Count resumes WHERE the status is 'reviewed'"
+    $sql2 = "SELECT COUNT(*) as count FROM resumes WHERE status = 'reviewed'";
+    $result2 = mysqli_query($conn, $sql2);
+    $row2 = mysqli_fetch_assoc($result2);
+    $stats['reviewed'] = $row2['count'];
+
+
+    // Query 3: Get PENDING resumes
+    // "Count resumes WHERE the status is 'pending'"
+    $sql3 = "SELECT COUNT(*) as count FROM resumes WHERE status = 'pending'";
+    $result3 = mysqli_query($conn, $sql3);
+    $row3 = mysqli_fetch_assoc($result3);
+    $stats['pending'] = $row3['count'];
+
+
+    // Query 4: Get AVERAGE Score
+    // "Calculate the average of the 'score' column from reviews table"
+    $sql4 = "SELECT AVG(score) as avg_score FROM reviews";
+    $result4 = mysqli_query($conn, $sql4);
+    $row4 = mysqli_fetch_assoc($result4);
     
-    $stats['total'] = $row_counts['total'];
-    $stats['reviewed'] = $row_counts['reviewed'];
-    $stats['pending'] = $row_counts['pending'];
-
-    // Query 2: Average Score from Reviews table
-    $sql_avg = "SELECT AVG(score) as average FROM reviews";
-    $result_avg = mysqli_query($conn, $sql_avg);
-    $row_avg = mysqli_fetch_assoc($result_avg);
-
-    // Round to 1 decimal place (e.g., 85.5), default to 0 if no reviews yet
-    $stats['avg_score'] = $row_avg['average'] ? round($row_avg['average'], 1) : 0;
+    //rounding the avg score
+    if ($row4['avg_score']) {
+        $stats['avg_score'] = round($row4['avg_score'], 1);
+    } else {
+        $stats['avg_score'] = 0;
+    }
 
     return $stats;
 }

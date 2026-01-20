@@ -20,12 +20,11 @@ function isEmailTaken($conn, $email) {
 function registerUser($conn, $fullname, $email, $phone, $dob, $password, $question, $answer, $role) {
     
     // 1. Sanitize the inputs
-    // This adds a backslash in front of quotes so SQL reads them as text, not code.
     $fullname = mysqli_real_escape_string($conn, $fullname);
     $email = mysqli_real_escape_string($conn, $email);
     $phone = mysqli_real_escape_string($conn, $phone);
     $password = mysqli_real_escape_string($conn, $password);
-    $question = mysqli_real_escape_string($conn, $question); // <--- Vital for "Pet's Name"
+    $question = mysqli_real_escape_string($conn, $question); 
     $answer = mysqli_real_escape_string($conn, $answer);
     $role = mysqli_real_escape_string($conn, $role);
 
@@ -41,8 +40,6 @@ function registerUser($conn, $fullname, $email, $phone, $dob, $password, $questi
     }
 }
 
-
-
 // Function 3: Login User
 // Explanation: We look for a user who matches BOTH the email AND the password.
 function loginUser($conn, $email, $password) {
@@ -56,6 +53,8 @@ function loginUser($conn, $email, $password) {
         return false; // Login failed
     }
 }
+
+
 
 //Forgetting password
 // 1. Get the security question for a specific email
@@ -117,6 +116,5 @@ function changeUserPassword($conn, $id, $new_password) {
     $sql = "UPDATE users SET password='$new_password' WHERE id='$id'";
     return mysqli_query($conn, $sql);
 }
-
 
 ?>
