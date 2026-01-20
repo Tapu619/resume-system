@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     
     <style>
-        /* 1. Layout Styles (Matches Login Page) */
+        /* 1. Layout Styles */
         body {
             display: flex;
             justify-content: center;
@@ -14,12 +14,12 @@
             min-height: 100vh;
             background-color: #f0f2f5;
             margin: 0;
-            padding: 20px; /* Prevents edges touching on small screens */
+            padding: 20px;
             font-family: 'Segoe UI', sans-serif;
         }
         .container {
             width: 100%;
-            max-width: 500px; /* Slightly wider than login for the extra fields */
+            max-width: 500px;
             padding: 40px;
             background: white;
             border-radius: 8px;
@@ -30,7 +30,7 @@
         input, select {
             width: 100%;
             padding: 12px;
-            margin: 10px 0; /* Consistent spacing */
+            margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
@@ -40,7 +40,7 @@
         .btn-register {
             width: 100%;
             padding: 12px;
-            background-color: #28a745; /* Green for Register */
+            background-color: #28a745; 
             color: white;
             border: none;
             border-radius: 4px;
@@ -54,7 +54,7 @@
             background-color: #218838;
         }
 
-        /* 4. AJAX Message Box (Hidden by default) */
+        /* 4. AJAX Message Box */
         #msgBox { 
             display: none; 
             margin-bottom: 20px; 
@@ -63,7 +63,6 @@
             border-radius: 4px;
         }
         
-        /* Helper for the radio buttons layout */
         .role-group {
             display: flex;
             gap: 20px;
@@ -76,6 +75,24 @@
             display: flex;
             align-items: center;
             gap: 5px;
+        }
+
+        /* --- NEW STYLES FOR EMAIL CHECK --- */
+        .status-available {
+            color: green;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+        .status-taken {
+            color: red;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: block;
+            margin-top: -5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -95,7 +112,11 @@
         </div>
 
         <input type="text" name="full_name" placeholder="Full Name" id="full_name">
-        <input type="email" name="email" placeholder="Email Address" id="email">
+        
+        <input type="email" name="email" placeholder="Email Address" id="email" onblur="checkEmail()">
+        
+        <span id="email_status"></span>
+
         <input type="text" name="phone" placeholder="Phone Number" id="phone">
         
         <label style="display:block; margin-top:10px; font-size:0.9em; font-weight: bold; color: #555;">Date of Birth:</label>
@@ -113,7 +134,7 @@
 
         <input type="text" name="security_answer" placeholder="Your Answer" id="security_answer">
 
-        <button type="submit" name="register_btn" class="btn-register">Register Now</button>
+        <button type="submit" name="register_btn" class="btn-register" id="regBtn">Register Now</button>
     </form>
     
     <p style="text-align: center; margin-top: 20px; font-size: 0.9em;">
@@ -123,15 +144,49 @@
 </div>
 
 <script>
+    // --- CHECK EMAIL VIA AJAX ---
+    function checkEmail() {
+        const email = document.getElementById('email').value;
+        const statusSpan = document.getElementById('email_status');
+        const regBtn = document.getElementById('regBtn');
+
+        // Don't check if empty
+        if(email.trim() === "") {
+            statusSpan.innerHTML = "";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('email', email);
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "../controllers/check_email.php", true);
+        
+        xhttp.onload = function() {
+            const data = JSON.parse(xhttp.responseText);
+            
+            if (data.status === 'available') {
+                statusSpan.innerHTML = data.message;
+                statusSpan.className = "status-available";
+                regBtn.disabled = false; // Enable button
+                regBtn.style.opacity = "1";
+            } else {
+                statusSpan.innerHTML = data.message;
+                statusSpan.className = "status-taken";
+                regBtn.disabled = true; // Disable button to prevent registration
+                regBtn.style.opacity = "0.6";
+            }
+        }
+        xhttp.send(formData);
+    }
+
+    // --- 2. EXISTING FORM SUBMIT FUNCTION ---
     function submitForm(e) {
-        // 1. Stop default reload
         e.preventDefault();
 
-        // 2. Get Input Values
         const form = document.getElementById('regForm');
         const formData = new FormData(form);
         
-        // specific values for validation
         const full_name = document.getElementById('full_name').value;
         const email = document.getElementById('email').value;
         const phone = document.getElementById('phone').value;
@@ -140,39 +195,31 @@
         const security_q = document.getElementById('security_question').value;
         const security_a = document.getElementById('security_answer').value;
         
-        // --- JAVASCRIPT VALIDATION START ---
-        
-        // A. Check Empty Fields (Using our custom empty() function)
+        // JS Validation
         if (empty(full_name) || empty(email) || empty(phone) || empty(dob) || empty(password) || empty(security_q) || empty(security_a)) {
              showError("All fields are required.");
-             return; // Stop function
+             return; 
         }
 
-        // B. Check Phone (11 Digits)
         if (phone.length !== 11 || isNaN(phone)) {
             showError("Phone number must be exactly 11 digits.");
             return;
         }
 
-        // C. Check Age (> 16)
         const birthDate = new Date(dob);
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const m = today.getMonth() - birthDate.getMonth();
-
-        // Adjust age
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
 
         if (age <= 16) {
             showError("You must be older than 16 to register.");
             return;
         }
         
-        // --- JAVASCRIPT VALIDATION END ---
-
-        // 3. If Validation Passes, Send AJAX Request
+        // AJAX Registration Request
         formData.append('register_btn', true); 
         const xhttp = new XMLHttpRequest();
         
@@ -194,7 +241,6 @@
         xhttp.send(formData);
     }
 
-    // Helper: Show Error Message
     function showError(msg) {
         const msgBox = document.getElementById("msgBox");
         msgBox.style.display = "block";
@@ -202,7 +248,6 @@
         msgBox.innerHTML = msg;
     }
 
-    // Returns true if value is empty string, null, or undefined
     function empty(val) {
         if (val === undefined || val === null || val.trim() === "") {
             return true;
