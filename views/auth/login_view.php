@@ -13,7 +13,7 @@
         /* RESET & LAYOUT */
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif; /* Applied the new font */
+            font-family: 'Inter', sans-serif;
             background-color: #f8f9fa;
             display: flex;
             flex-direction: column;
@@ -57,19 +57,18 @@
             max-width: 1100px;
             margin: 0 auto;
             width: 100%;
-            gap: 60px; /* Space between text and form */
+            gap: 60px;
         }
 
-        /* ANIMATION: Fade In Up */
+        /* ANIMATION */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* LEFT SIDE: Text */
         .hero-text {
             flex: 1;
-            animation: fadeInUp 0.6s ease-out; /* Apply animation */
+            animation: fadeInUp 0.6s ease-out;
         }
         .hero-text h1 {
             font-size: 3.2em;
@@ -87,16 +86,16 @@
             max-width: 90%;
         }
 
-        /* RIGHT SIDE: Login Card */
+        /* LOGIN CARD */
         .login-wrapper {
-            flex: 0 0 400px; /* Fixed width of 400px */
-            animation: fadeInUp 0.8s ease-out; /* Slightly slower animation */
+            flex: 0 0 400px;
+            animation: fadeInUp 0.8s ease-out;
         }
         .login-card {
             background: white;
             padding: 40px;
-            border-radius: 16px; /* Softer rounded corners */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08); /* Premium shadow */
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             border: 1px solid rgba(0,0,0,0.02);
         }
 
@@ -124,7 +123,7 @@
             background-color: white;
             border-color: #007bff;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(0,123,255,0.1); /* Professional Glow */
+            box-shadow: 0 0 0 4px rgba(0,123,255,0.1);
         }
 
         .btn-login {
@@ -172,7 +171,6 @@
             border: 1px solid #fee2e2;
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 900px) {
             .main-content { flex-direction: column; padding: 20px; text-align: center; }
             .hero-text { margin-bottom: 40px; padding-right: 0; }
@@ -210,21 +208,23 @@
                     Please enter your details to sign in.
                 </p>
 
+                <div id="js-error-banner" class="error-banner" style="display: none;"></div>
+
                 <?php if(isset($error_msg) && $error_msg): ?>
                     <div class="error-banner"><?php echo $error_msg; ?></div>
                 <?php endif; ?>
 
-                <form action="" method="POST" novalidate>
+                <form id="loginForm" action="" method="POST" novalidate>
                     
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input type="email" name="email" placeholder="name@company.com" 
+                        <input type="email" name="email" id="email" placeholder="name@company.com" 
                                value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="••••••••" required>
+                        <input type="password" name="password" id="password" placeholder="••••••••" required>
                     </div>
 
                     <button type="submit" name="login_btn" class="btn-login">Sign In</button>
@@ -244,6 +244,37 @@
     <div class="footer">
         &copy; <?php echo date("Y"); ?> Resume Review System. All rights reserved.
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            
+            // Get values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('js-error-banner');
+
+            // Hide box initially
+            errorBox.style.display = 'none';
+
+            // Check if empty (Using our helper function)
+            if (empty(email) || empty(password)) {
+                // Stop the form from sending to PHP
+                e.preventDefault(); 
+                
+                // Show Error in the custom box
+                errorBox.innerText = "Error: Please enter both email and password.";
+                errorBox.style.display = 'block';
+            }
+        });
+
+        // Helper: Custom empty() function (Like PHP)
+        function empty(val) {
+            if (val === undefined || val === null || val.trim() === "") {
+                return true;
+            }
+            return false;
+        }
+    </script>
 
 </body>
 </html>

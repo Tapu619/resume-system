@@ -3,7 +3,6 @@ session_start();
 require_once '../config/db.php';
 require_once '../models/userModel.php';
 
-// Security Check
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -13,10 +12,8 @@ $user_id = $_SESSION['user_id'];
 $success_msg = "";
 $error_msg = "";
 
-// --- 1. FETCH CURRENT USER DATA FIRST ---
-// We move this to the top so we can compare "New Input" vs "Old Database Data"
+// Get current data first to populate the form
 $user = getUserById($conn, $user_id);
-
 
 // --- HANDLE FORM 1: UPDATE PROFILE ---
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn'])) {
@@ -24,26 +21,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn']))
     $phone = trim($_POST['phone']);
     $dob = $_POST['dob'];
     
-    // Validation 1: Check for empty fields
+    // 1. Check Empty Fields FIRST
     if (empty($full_name) || empty($phone) || empty($dob)) {
-        $error_msg = "Error: Name, Phone, and Date of Birth cannot be empty.";
+        $error_msg = "Error: All profile fields are required.";
     } 
-    // Validation 2: Check if data is actually different
-    elseif ($full_name == $user['full_name'] && $phone == $user['phone'] && $dob == $user['dob']) {
-        $error_msg = "No changes were made to your profile."; 
+    // 2. Check Phone (Must be 11 digits and numeric)
+    elseif (strlen($phone) !== 11 || !is_numeric($phone)) {
+        $error_msg = "Error: Phone number must be exactly 11 digits (e.g. 017xxxxxxxx).";
     }
     else {
-        // 3. Update Database
-        if (updateUserProfile($conn, $user_id, $full_name, $phone, $dob)) {
-            $success_msg = "Profile updated successfully!";
-            $_SESSION['full_name'] = $full_name; 
-            
-            // Refresh the $user variable so the form shows the NEW data immediately
-            $user['full_name'] = $full_name;
-            $user['phone'] = $phone;
-            $user['dob'] = $dob;
-        } else {
-            $error_msg = "Database Error: Failed to update profile.";
+        // 3. Calculate Age
+        $dob_date = new DateTime($dob);
+        $today = new DateTime();
+        $age = $today->diff($dob_date)->y;
+
+        if ($age <= 16) {
+            $error_msg = "Error: You must be older than 16 years old.";
+        }
+        // 4. Check if No Changes Made
+        elseif ($full_name == $user['full_name'] && $phone == $user['phone'] && $dob == $user['dob']) {
+            $error_msg = "No changes were made to your profile.";
+        }
+        else {
+            // 5. Update Database
+            if (updateUserProfile($conn, $user_id, $full_name, $phone, $dob)) {
+                $success_msg = "Profile updated successfully!";
+                $_SESSION['full_name'] = $full_name;
+                
+                // Refresh data so the form shows new info immediately
+                $user['full_name'] = $full_name;
+                $user['phone'] = $phone;
+                $user['dob'] = $dob;
+            } else {
+                $error_msg = "Database Error: Failed to update profile.";
+            }
         }
     }
 }
@@ -54,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_pass_btn'])) {
     $confirm_pass = $_POST['confirm_password'];
     
     if (empty($new_pass) || empty($confirm_pass)) {
-        $error_msg = "Error: Password fields cannot be empty.";
+        $error_msg = "Error: Please fill in both password fields.";
     }
     elseif ($new_pass !== $confirm_pass) {
         $error_msg = "Error: New passwords do not match.";
@@ -68,6 +79,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_pass_btn'])) {
     }
 }
 
-// Load the View
 include '../views/common/profile_view.php';
 ?>

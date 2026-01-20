@@ -124,43 +124,90 @@
 
 <script>
     function submitForm(e) {
-        // 1. Stop the page from reloading
+        // 1. Stop default reload
         e.preventDefault();
 
-        // 2. Get the form data automatically
+        // 2. Get Input Values
         const form = document.getElementById('regForm');
         const formData = new FormData(form);
-        formData.append('register_btn', true); // Add the button trigger manually
+        
+        // specific values for validation
+        const full_name = document.getElementById('full_name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const dob = document.getElementById('dob').value;
+        const password = document.getElementById('password').value;
+        const security_q = document.getElementById('security_question').value;
+        const security_a = document.getElementById('security_answer').value;
+        
+        // --- JAVASCRIPT VALIDATION START ---
+        
+        // A. Check Empty Fields (Using our custom empty() function)
+        if (empty(full_name) || empty(email) || empty(phone) || empty(dob) || empty(password) || empty(security_q) || empty(security_a)) {
+             showError("All fields are required.");
+             return; // Stop function
+        }
 
-        // 3. Create the Request
+        // B. Check Phone (11 Digits)
+        if (phone.length !== 11 || isNaN(phone)) {
+            showError("Phone number must be exactly 11 digits.");
+            return;
+        }
+
+        // C. Check Age (> 16)
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+
+        // Adjust age
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+        if (age <= 16) {
+            showError("You must be older than 16 to register.");
+            return;
+        }
+        
+        // --- JAVASCRIPT VALIDATION END ---
+
+        // 3. If Validation Passes, Send AJAX Request
+        formData.append('register_btn', true); 
         const xhttp = new XMLHttpRequest();
-
-        // Define what happens when the data loads
+        
         xhttp.onload = function() {
-            // A. Parse the JSON response from PHP
             const data = JSON.parse(xhttp.responseText);
-            
-            // B. Find the message box
             const msgBox = document.getElementById("msgBox");
             msgBox.style.display = "block";
             msgBox.innerHTML = data.message;
 
-            // C. Check status (success or error)
             if (data.status === 'success') {
-                msgBox.className = 'msg success'; // Uses style.css green box
-                
-                // Redirect to login after 1.5 seconds
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 1500);
+                msgBox.className = 'msg success';
+                setTimeout(function() { window.location.href = 'login.php'; }, 1500);
             } else {
-                msgBox.className = 'msg error'; // Uses style.css red box
+                msgBox.className = 'msg error';
             }
         }
-
-        // 4. Send the request
+        
         xhttp.open("POST", "../controllers/register.php", true);
         xhttp.send(formData);
+    }
+
+    // Helper: Show Error Message
+    function showError(msg) {
+        const msgBox = document.getElementById("msgBox");
+        msgBox.style.display = "block";
+        msgBox.className = "msg error";
+        msgBox.innerHTML = msg;
+    }
+
+    // Returns true if value is empty string, null, or undefined
+    function empty(val) {
+        if (val === undefined || val === null || val.trim() === "") {
+            return true;
+        }
+        return false;
     }
 </script>
 

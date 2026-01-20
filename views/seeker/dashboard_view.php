@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Job Seeker Dashboard</title>
-
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Hide JS error box initially */
+        #js-error-box { display: none; }
+    </style>
 </head>
 <body>
 
@@ -14,27 +17,27 @@
         <h2>Job Seeker Dashboard</h2>
         <div class="user-info">
             <span>Welcome, <strong><?php echo $_SESSION['full_name']; ?></strong></span>
-            
             <a href="profile.php" class="btn-link">My Profile</a>
-            
             <a href="logout.php" class="btn-logout">Logout</a>
         </div>
     </div>
 
+    <div id="js-error-box" class="msg error"></div>
+
     <?php if ($message): ?>
-        <div class="msg success"><?php echo $message; ?></div>
+        <div id="php-msg" class="msg success"><?php echo $message; ?></div>
     <?php endif; ?>
     
     <?php if ($error): ?>
-        <div class="msg error"><?php echo $error; ?></div>
+        <div id="php-err" class="msg error"><?php echo $error; ?></div>
     <?php endif; ?>
 
     <div style="margin-bottom: 40px;">
         <h3>Upload New Resume</h3>
         <p style="color: #666;">Select a PDF file to submit for review. Uploading a new file will replace your previous submission.</p>
         
-        <form action="" method="POST" enctype="multipart/form-data" novalidate>
-            <input type="file" name="resume_pdf" accept="application/pdf" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        <form id="uploadForm" action="" method="POST" enctype="multipart/form-data" novalidate>
+            <input type="file" name="resume_pdf" id="resume_pdf" accept="application/pdf" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             <button type="submit" class="btn-upload">Upload PDF</button>
         </form>
     </div>
@@ -68,7 +71,7 @@
                 </span>
             </p>
 
-             <?php if ($resume['status'] == 'reviewed' && $feedback): ?>
+            <?php if ($resume['status'] == 'reviewed' && $feedback): ?>
                 <div class="feedback-container">
                     <h4>Review Results</h4>
                     
@@ -98,6 +101,63 @@
     <?php endif; ?>
 
 </div>
+
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        
+        // 1. Clear previous errors
+        hideError();
+
+        // 2. Get the file input
+        const fileInput = document.getElementById('resume_pdf');
+        const file = fileInput.files[0]; // Get the actual file object
+
+        // A. Check if Empty (No file selected)
+        if (!file) {
+            e.preventDefault();
+            showError("Error: Please select a PDF file to upload.");
+            return;
+        }
+
+        // B. Check File Type (Must be PDF)
+        if (file.type !== "application/pdf") {
+            e.preventDefault();
+            showError("Error: Invalid file format. Only PDF files are allowed.");
+            return;
+        }
+
+        // C. Check File Size (5MB = 5 * 1024 * 1024 bytes)
+        const maxSize = 5 * 1024 * 1024; 
+        if (file.size > maxSize) {
+            e.preventDefault();
+            showError("Error: File size is too large. Max limit is 5MB.");
+            return;
+        }
+    });
+
+    // --- HELPER FUNCTIONS ---
+
+    function showError(msg) {
+        const box = document.getElementById('js-error-box');
+        box.innerText = msg;
+        box.style.display = 'block';
+        window.scrollTo(0, 0); 
+    }
+
+    function hideError() {
+        // Hide JS Error
+        const jsBox = document.getElementById('js-error-box');
+        jsBox.style.display = 'none';
+
+        // Hide PHP Success Message
+        const phpMsg = document.getElementById('php-msg');
+        if (phpMsg) phpMsg.style.display = 'none';
+
+        // Hide PHP Error Message
+        const phpErr = document.getElementById('php-err');
+        if (phpErr) phpErr.style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
