@@ -248,3 +248,50 @@
     <br><br> 
 
 </div>
+
+<script>
+    function deleteUserAjax(userId) {
+        
+        // A. Confirmation Alert
+        if (!confirm("Are you sure you want to delete this user? This will also delete their resumes and reviews.")) {
+            return; // Stop if they click Cancel
+        }
+
+        // B. Prepare Data
+        const formData = new FormData();
+        formData.append('user_id', userId);
+
+        // C. Send Request to our new Controller
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "../controllers/delete_user.php", true);
+        
+        xhttp.onload = function() {
+            try {
+                // Parse the JSON response
+                const response = JSON.parse(xhttp.responseText);
+
+                if (response.status === 'success') {
+                    // D. On Success: Remove the row from the table
+                    const row = document.getElementById('row_' + userId);
+                    if (row) {
+                        //fade out effect 
+                        row.style.transition = "opacity 0.5s";
+                        row.style.opacity = "0";
+                        setTimeout(() => row.remove(), 500); 
+                    }
+                    alert("User deleted successfully.");
+                } else {
+                    alert("Error: " + response.message);
+                }
+            } catch (e) {
+                alert("Error processing response. Please check console.");
+                console.log(xhttp.responseText); // For debugging
+            }
+        };
+
+        xhttp.send(formData);
+    }
+</script>
+
+</body>
+</html>
