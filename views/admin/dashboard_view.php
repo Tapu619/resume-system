@@ -132,3 +132,39 @@
         </div>
 
     </div>
+
+
+    <h3 class="section-title">Resume Management</h3>
+    
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Job Seeker</th>
+                    <th style="width: 15%;">Resume File</th>
+                    <th style="width: 15%;">Status</th>
+                    <th style="width: 35%;">Assigned Reviewer</th>
+                    <th style="width: 15%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($all_resumes as $resume): ?>
+                <tr>
+                    <td>
+                        <strong><?php echo $resume['seeker_name']; ?></strong><br>
+                        <span style="font-size: 0.85em; color: #888;">
+                            <?php echo date("M d, Y", strtotime($resume['upload_date'])); ?>
+                        </span>
+                    </td>
+                    
+                    <td>
+                        <a href="<?php echo $resume['file_path']; ?>" target="_blank" style="color: #007bff; text-decoration: none;">
+                            📄 View PDF
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <span class="badge <?php echo $resume['status']; ?>">
+                            <?php echo ucfirst($resume['status']); ?>
+                        </span>
+                    </td>
