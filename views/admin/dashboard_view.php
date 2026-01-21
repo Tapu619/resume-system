@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     
     <style>
-        /* Admin-Specific Table Styles */
         .section-title { 
             margin-top: 40px; 
             margin-bottom: 15px; 
@@ -252,16 +251,16 @@
 <script>
     function deleteUserAjax(userId) {
         
-        // A. Confirmation Alert
+        // Confirmation Alert
         if (!confirm("Are you sure you want to delete this user? This will also delete their resumes and reviews.")) {
-            return; // Stop if Cancel
+            return; 
         }
 
-        // B. Prepare Data
+        //  Prepare Data
         const formData = new FormData();
         formData.append('user_id', userId);
 
-        // C. Send Request to our new Controller
+        // Send Request to our new Controller
         const xhttp = new XMLHttpRequest();
         xhttp.open("POST", "../controllers/delete_user.php", true);
         
@@ -271,7 +270,7 @@
                 const response = JSON.parse(xhttp.responseText);
 
                 if (response.status === 'success') {
-                    // D. On Success: Remove the row from the table
+                    // Remove the row from the table
                     const row = document.getElementById('row_' + userId);
                     if (row) {
                         row.style.transition = "opacity 0.5s";

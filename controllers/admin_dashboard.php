@@ -3,7 +3,7 @@ session_start();
 require_once '../config/db.php';
 require_once '../models/adminModel.php';
 
-// 1. Security Check: Only Admins Allowed
+// Security Check
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
     exit;
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 $message = "";
 $error = "";
 
-// 2. Handle Form: Assign Reviewer
+// Assign Reviewer
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     $resume_id = $_POST['resume_id'];
 
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     if ($current_status == 'reviewed') {
         $error = "Error: This resume has already been reviewed. You cannot reassign it.";
     }
-    // --- Existing Validation: Check if Reviewer Selected ---
+    // Check if Reviewer Selected
     elseif (!isset($_POST['reviewer_id']) || empty($_POST['reviewer_id'])) {
         $error = "Error: You must select a reviewer from the list.";
     } 
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
 }
 
 
-// 4. Fetch Data for the View
+// Fetch Data for the View
 $all_users = getAllUsers($conn);
 $all_resumes = getAllResumes($conn);
 $reviewers_list = getAllReviewers($conn);
@@ -46,6 +46,6 @@ $reviewers_list = getAllReviewers($conn);
 // Get Stats
 $system_stats = getSystemStats($conn);
 
-// 5. Load View
+// Load View
 include '../views/admin/dashboard_view.php'; 
 ?>

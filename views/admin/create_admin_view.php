@@ -105,10 +105,10 @@
 <script>
     document.getElementById('adminForm').addEventListener('submit', function(e) {
         
-        // 1. Clear previous errors
+        // Clear previous errors
         hideError();
 
-        // 2. Get Values
+        // Get Values
         const name = document.getElementById('new_name').value;
         const email = document.getElementById('new_email').value;
         const pass = document.getElementById('new_pass').value;
@@ -116,14 +116,14 @@
         const dob = document.getElementById('new_dob').value;
         const answer = document.getElementById('new_answer').value;
 
-        // A. Check Empty
+       
         if (empty(name) || empty(email) || empty(pass) || empty(phone) || empty(dob) || empty(answer)) {
             e.preventDefault();
             showError("Error: All fields are required.");
             return;
         }
 
-        // B. Check Phone (11 digits, starts with 01)
+        
         const phoneRegex = /^01[0-9]{9}$/; 
         if (!phoneRegex.test(phone)) {
             e.preventDefault();
@@ -131,11 +131,11 @@
             return;
         }
 
-        // C. Check Age (> 30, Year Only)
+        
         const birthDate = new Date(dob);
         const today = new Date();
         
-        // Calculate difference in Years only
+       
         const age = today.getFullYear() - birthDate.getFullYear();
 
         if (age <= 30) {
@@ -145,7 +145,7 @@
         }
     });
 
-    // --- HELPER FUNCTIONS ---
+
 
     function showError(msg) {
         const box = document.getElementById('js-error-box');
@@ -167,7 +167,7 @@
         if (phpErr) phpErr.style.display = 'none';
     }
 
-    // Custom empty() function (Like PHP)
+    // Custom empty() function 
     function empty(val) {
         if (val === undefined || val === null || val.trim() === "") {
             return true;

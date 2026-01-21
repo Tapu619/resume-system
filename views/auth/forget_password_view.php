@@ -73,9 +73,9 @@
 </div>
 
 <script>
-    // Since the forms appear conditionally, we check if they exist before attaching listeners
 
-    // --- VALIDATION FOR STEP 1 (EMAIL) ---
+
+    // validate email
     const emailForm = document.getElementById('emailForm');
     if (emailForm) {
         emailForm.addEventListener('submit', function(e) {
@@ -89,7 +89,7 @@
         });
     }
 
-    // --- VALIDATION FOR STEP 2 (ANSWER) ---
+    // validate security answer
     const answerForm = document.getElementById('answerForm');
     if (answerForm) {
         answerForm.addEventListener('submit', function(e) {
@@ -103,7 +103,7 @@
         });
     }
 
-    // --- VALIDATION FOR STEP 3 (PASSWORD RESET) ---
+    // validate password
     const passForm = document.getElementById('passForm');
     if (passForm) {
         passForm.addEventListener('submit', function(e) {
@@ -128,7 +128,7 @@
     }
 
 
-    // --- HELPER FUNCTIONS ---
+    // custom functions
 
     function showError(msg) {
         const box = document.getElementById('js-error-box');

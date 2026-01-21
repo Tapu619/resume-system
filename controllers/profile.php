@@ -15,22 +15,22 @@ $error_msg = "";
 // Get current data first to populate the form
 $user = getUserById($conn, $user_id);
 
-// --- HANDLE FORM 1: UPDATE PROFILE ---
+// - UPDATE PROFILE 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn'])) {
     $full_name = trim($_POST['full_name']);
     $phone = trim($_POST['phone']);
     $dob = $_POST['dob'];
     
-    // 1. Check Empty Fields FIRST
+    // Check Empty Fields FIRST
     if (empty($full_name) || empty($phone) || empty($dob)) {
         $error_msg = "Error: All profile fields are required.";
     } 
-    // 2. Check Phone (Must be 11 digits and numeric)
+    // Check Phone (Must be 11 digits and numeric)
     elseif (strlen($phone) !== 11 || !is_numeric($phone)) {
         $error_msg = "Error: Phone number must be exactly 11 digits (e.g. 017xxxxxxxx).";
     }
     else {
-        // 3. Calculate Age
+        //  Calculate Age
         $dob_date = new DateTime($dob);
         $today = new DateTime();
         $age = $today->diff($dob_date)->y;
@@ -38,12 +38,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn']))
         if ($age <= 16) {
             $error_msg = "Error: You must be older than 16 years old.";
         }
-        // 4. Check if No Changes Made
+        // Check if No Changes Made
         elseif ($full_name == $user['full_name'] && $phone == $user['phone'] && $dob == $user['dob']) {
             $error_msg = "No changes were made to your profile.";
         }
         else {
-            // 5. Update Database
+            //  Update Database
             if (updateUserProfile($conn, $user_id, $full_name, $phone, $dob)) {
                 $success_msg = "Profile updated successfully!";
                 $_SESSION['full_name'] = $full_name;
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile_btn']))
     }
 }
 
-// --- HANDLE FORM 2: CHANGE PASSWORD ---
+// CHANGE PASSWORD 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_pass_btn'])) {
     $new_pass = $_POST['new_password'];
     $confirm_pass = $_POST['confirm_password'];

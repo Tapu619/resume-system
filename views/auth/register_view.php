@@ -77,7 +77,7 @@
             gap: 5px;
         }
 
-        /* --- NEW STYLES FOR EMAIL CHECK --- */
+        /*  FOR EMAIL CHECK --- */
         .status-available {
             color: green;
             font-size: 0.85em;
@@ -144,7 +144,7 @@
 </div>
 
 <script>
-    // --- CHECK EMAIL VIA AJAX ---
+    // CHECK EMAIL VIA AJAX 
     function checkEmail() {
         const email = document.getElementById('email').value;
         const statusSpan = document.getElementById('email_status');

@@ -1,13 +1,11 @@
 <?php
 require_once '../config/db.php';
 
-// Function 1: Check if a user already exists
-// Explanation: We run a query to count how many users have this specific email.
+// Check if a user already exists
 function isEmailTaken($conn, $email) {
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $sql);
     
-    // If the number of rows found is greater than 0, the email is taken.
     if (mysqli_num_rows($result) > 0) {
         return true; 
     } else {
@@ -15,11 +13,9 @@ function isEmailTaken($conn, $email) {
     }
 }
 
-// Function 2: Register a new user
-// Explanation: We take the form data and insert it directly into the database.
+// Register a new user
 function registerUser($conn, $fullname, $email, $phone, $dob, $password, $question, $answer, $role) {
     
-    // 1. Sanitize the inputs
     $fullname = mysqli_real_escape_string($conn, $fullname);
     $email = mysqli_real_escape_string($conn, $email);
     $phone = mysqli_real_escape_string($conn, $phone);
@@ -28,11 +24,9 @@ function registerUser($conn, $fullname, $email, $phone, $dob, $password, $questi
     $answer = mysqli_real_escape_string($conn, $answer);
     $role = mysqli_real_escape_string($conn, $role);
 
-    // 2. The SQL Query
     $sql = "INSERT INTO users (full_name, email, phone, dob, password, security_question, security_answer, role) 
             VALUES ('$fullname', '$email', '$phone', '$dob', '$password', '$question', '$answer', '$role')";
 
-    // 3. Execute
     if (mysqli_query($conn, $sql)) {
         return true;
     } else {
@@ -40,24 +34,21 @@ function registerUser($conn, $fullname, $email, $phone, $dob, $password, $questi
     }
 }
 
-// Function 3: Login User
-// Explanation: We look for a user who matches BOTH the email AND the password.
+// Login User
 function loginUser($conn, $email, $password) {
     $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
     $result = mysqli_query($conn, $sql);
 
-    // If we find exactly 1 user, login is successful
     if (mysqli_num_rows($result) == 1) {
-        return mysqli_fetch_assoc($result); // Return the user's data array
+        return mysqli_fetch_assoc($result); 
     } else {
-        return false; // Login failed
+        return false; 
     }
 }
 
+// FORGOT PASSWORD FUNCTIONS 
 
-
-//Forgetting password
-// 1. Get the security question for a specific email
+// Get the security question
 function getUserQuestion($conn, $email) {
     $sql = "SELECT security_question FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $sql);
@@ -66,42 +57,43 @@ function getUserQuestion($conn, $email) {
         $row = mysqli_fetch_assoc($result);
         return $row['security_question'];
     } else {
-        return false; // Email not found
+        return false; 
     }
 }
 
-// 2. Check if the provided answer is correct
+// Check if the provided answer is correct
 function checkSecurityAnswer($conn, $email, $answer) {
-    // We check if a user exists with THIS email AND THIS answer
     $sql = "SELECT id FROM users WHERE email = '$email' AND security_answer = '$answer'";
     $result = mysqli_query($conn, $sql);
     
     if (mysqli_num_rows($result) > 0) {
-        return true; // Match found
+        return true; 
     } else {
-        return false; // Wrong answer
+        return false; 
     }
 }
 
-// 3. Update the password
-function updatePassword($conn, $email, $new_password) {
-    $sql = "UPDATE users SET password = '$new_password' WHERE email = '$email'";
+// UPDATED: Update password using ID 
+function updatePassword($conn, $id, $new_password) {
+    // Sanitize inputs
+    $new_password = mysqli_real_escape_string($conn, $new_password);
+    $id = mysqli_real_escape_string($conn, $id);
+    
+    $sql = "UPDATE users SET password = '$new_password' WHERE id = '$id'";
     return mysqli_query($conn, $sql);
 }
 
+// PROFILE FUNCTIONS
 
-//view Profile & update
-
-// 1. Fetch all user details by ID (for View Profile)
+// Fetch all user details by ID
 function getUserById($conn, $id) {
     $sql = "SELECT * FROM users WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     return mysqli_fetch_assoc($result);
 }
 
-// 2. Update Profile Details (Name, Phone, DOB)
+// Update Profile Details
 function updateUserProfile($conn, $id, $full_name, $phone, $dob) {
-    // Sanitize first
     $full_name = mysqli_real_escape_string($conn, $full_name);
     $phone = mysqli_real_escape_string($conn, $phone);
     $dob = mysqli_real_escape_string($conn, $dob);
@@ -110,11 +102,10 @@ function updateUserProfile($conn, $id, $full_name, $phone, $dob) {
     return mysqli_query($conn, $sql);
 }
 
-// 3. Change Password (for logged-in user)
+// Change Password for logged-in user
 function changeUserPassword($conn, $id, $new_password) {
     $new_password = mysqli_real_escape_string($conn, $new_password);
     $sql = "UPDATE users SET password='$new_password' WHERE id='$id'";
     return mysqli_query($conn, $sql);
 }
-
 ?>

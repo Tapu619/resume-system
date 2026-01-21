@@ -75,7 +75,7 @@
     </div>
 
     <script>
-        // 1. Validate Profile Info
+        //Validate Profile Info
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             
             // Clean up old messages first
@@ -85,14 +85,14 @@
             const phone = document.getElementById('phone').value;
             const dob = document.getElementById('dob').value;
             
-            // A. Check Empty
+            
             if (empty(name) || empty(phone) || empty(dob)) {
                 e.preventDefault();
                 showError("Error: All profile fields are required.");
                 return;
             }
 
-            // B. Check Phone
+            
             const phoneRegex = /^01[0-9]{9}$/; 
             if (!phoneRegex.test(phone)) {
                 e.preventDefault();
@@ -100,7 +100,7 @@
                 return;
             }
 
-            // C. Check Age
+            
             const birthDate = new Date(dob);
             const today = new Date();
             let age = today.getFullYear() - birthDate.getFullYear();
@@ -116,10 +116,10 @@
             }
         });
 
-        // 2. Validate Password Change
+        // Validate Password Change
         document.getElementById('passForm').addEventListener('submit', function(e) {
             
-            // Clean up old messages first
+            // Clean up old messages 
             hideError();
 
             const p1 = document.getElementById('new_password').value;
@@ -138,7 +138,7 @@
             }
         });
 
-        // --- HELPER FUNCTIONS ---
+        // custom functions
 
         function showError(msg) {
             const box = document.getElementById('js-error-box');
@@ -147,20 +147,19 @@
             window.scrollTo(0, 0); 
         }
 
-        // --- THE UPDATED FUNCTION ---
-        // This now hides JS errors AND the old PHP messages
+        
         function hideError() {
-            // 1. Hide JS Error Box
+            // Hide JS Error Box
             const jsBox = document.getElementById('js-error-box');
             jsBox.style.display = 'none';
 
-            // 2. Hide PHP Success Message (if it exists)
+            // Hide PHP Success Message (if it exists)
             const phpSuccess = document.getElementById('php-success');
             if (phpSuccess) {
                 phpSuccess.style.display = 'none';
             }
 
-            // 3. Hide PHP Error Message (if it exists)
+            // Hide PHP Error Message (if it exists)
             const phpError = document.getElementById('php-error');
             if (phpError) {
                 phpError.style.display = 'none';

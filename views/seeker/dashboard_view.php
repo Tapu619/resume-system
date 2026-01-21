@@ -104,28 +104,28 @@
 <script>
     document.getElementById('uploadForm').addEventListener('submit', function(e) {
         
-        // 1. Clear previous errors
+        //Clear previous errors
         hideError();
 
-        // 2. Get the file input
+        // Get the file
         const fileInput = document.getElementById('resume_pdf');
         const file = fileInput.files[0]; // Get the actual file object
 
-        // A. Check if Empty (No file selected)
+        
         if (!file) {
             e.preventDefault();
             showError("Error: Please select a PDF file to upload.");
             return;
         }
 
-        // B. Check File Type (Must be PDF)
+        
         if (file.type !== "application/pdf") {
             e.preventDefault();
             showError("Error: Invalid file format. Only PDF files are allowed.");
             return;
         }
 
-        // C. Check File Size (5MB = 5 * 1024 * 1024 bytes)
+
         const maxSize = 5 * 1024 * 1024; 
         if (file.size > maxSize) {
             e.preventDefault();
@@ -134,7 +134,7 @@
         }
     });
 
-    // --- HELPER FUNCTIONS ---
+    // custom functions
 
     function showError(msg) {
         const box = document.getElementById('js-error-box');

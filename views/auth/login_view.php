@@ -278,9 +278,8 @@
             // Hide box initially
             errorBox.style.display = 'none';
 
-            // Check if empty (Using our helper function)
+            // Check if empty
             if (empty(email) || empty(password)) {
-                // Stop the form from sending to PHP
                 e.preventDefault(); 
                 
                 // Show Error in the custom box
@@ -289,7 +288,7 @@
             }
         });
 
-        // Helper: Custom empty() function (Like PHP)
+        // cusmtom empty functions
         function empty(val) {
             if (val === undefined || val === null || val.trim() === "") {
                 return true;

@@ -9,7 +9,6 @@ session_destroy();
 
 // DELETE THE COOKIE ---
 if (isset($_COOKIE['remember_user'])) {
-    // Empty the value and set expiration time to 1 hour in the past
     setcookie('remember_user', '', time() - 3600, "/");
     
     unset($_COOKIE['remember_user']);

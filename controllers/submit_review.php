@@ -13,12 +13,12 @@ $reviewer_id = $_SESSION['user_id'];
 $message = "";
 $error = "";
 
-// 1. Get Resume ID from URL
+// Get Resume ID from URL
 if (isset($_GET['id'])) {
     $resume_id = $_GET['id'];
     $resume_data = getResumeDetails($conn, $resume_id);
 
-    // Basic Validation: Ensure this resume exists and is assigned to THIS reviewer
+    // assigned to THIS reviewer
     if (!$resume_data || $resume_data['assigned_to'] != $reviewer_id) {
         die("Access Denied: You are not assigned to this resume.");
     }
@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-// 2. Handle Form Submission
+// Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) {
     
     // Collect inputs
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) 
     $comments = trim($_POST['comments']);
 
     
-    // Check if score is empty (Must check explicitly for empty string, because "0" is a valid score)
+    // Check if score is empty 
     if ($score === "") {
         $error = "Error: Please enter a score.";
     }
@@ -48,10 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) 
         $error = "Error: Score must be between 0 and 100.";
     } 
     else {
-        // Validation Passed -> Submit Review
+
         if (submitReview($conn, $resume_id, $reviewer_id, $score, $comments)) {
             $message = "Review submitted successfully!";
-            // Refresh data to show updated status immediately
             $resume_data['status'] = 'reviewed'; 
         } else {
             $error = "Database Error: Could not save review.";
