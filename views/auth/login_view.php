@@ -59,15 +59,11 @@
             gap: 60px;
         }
 
-        /* ANIMATION */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Removed Animation Keyframes */
 
         .hero-text {
             flex: 1;
-            animation: fadeInUp 0.6s ease-out;
+            /* Animation removed */
         }
         .hero-text h1 {
             font-size: 3.2em;
@@ -88,7 +84,7 @@
         /* LOGIN CARD */
         .login-wrapper {
             flex: 0 0 400px;
-            animation: fadeInUp 0.8s ease-out;
+            /* Animation removed */
         }
         .login-card {
             background: white;
@@ -170,7 +166,7 @@
             border: 1px solid #fee2e2;
         }
 
-        /* NEW: REMEMBER ME CHECKBOX STYLES */
+        /* REMEMBER ME CHECKBOX STYLES */
         .checkbox-group { 
             display: flex; 
             align-items: center; 
@@ -288,7 +284,7 @@
             }
         });
 
-        // cusmtom empty functions
+        // custom empty functions
         function empty(val) {
             if (val === undefined || val === null || val.trim() === "") {
                 return true;
