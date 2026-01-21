@@ -16,7 +16,6 @@ $error = "";
 // 1. Handle File Upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['resume_pdf'])) {
     
-    // --- NEW VALIDATION: Check Existing Status ---
     // Fetch the current resume from the database
     $current_resume = getResumeByUserId($conn, $user_id);
 

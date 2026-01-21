@@ -15,8 +15,8 @@ $error = "";
 // 2. Handle Form: Assign Reviewer
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     $resume_id = $_POST['resume_id'];
+
     
-    // --- NEW VALIDATION: Check Status First ---
     // We need to see if it is already reviewed
     $status_sql = "SELECT status FROM resumes WHERE id = '$resume_id'";
     $status_result = mysqli_query($conn, $status_sql);

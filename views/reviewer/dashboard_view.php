@@ -58,7 +58,7 @@
                     
                     <td style="padding: 15px;">
                         <a href="<?php echo $resume['file_path']; ?>" target="_blank" style="color: #007bff; text-decoration: none;">
-                            📄 View PDF
+                            View PDF
                         </a>
                     </td>
                     
@@ -71,7 +71,7 @@
                     <td style="padding: 15px;">
                         <?php if($resume['status'] == 'pending'): ?>
                             <a href="submit_review.php?id=<?php echo $resume['id']; ?>" class="btn-grade">
-                                ✎ Grade This
+                                Grade This
                             </a>
                         <?php else: ?>
                             <span class="btn-disabled">Completed</span>

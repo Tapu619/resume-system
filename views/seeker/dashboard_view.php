@@ -5,7 +5,6 @@
     <title>Job Seeker Dashboard</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        /* Hide JS error box initially */
         #js-error-box { display: none; }
     </style>
 </head>

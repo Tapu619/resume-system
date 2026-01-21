@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review_btn'])) 
     $score = $_POST['score'];
     $comments = trim($_POST['comments']);
 
-    // --- NEW VALIDATION CHECKS ---
     
     // Check if score is empty (Must check explicitly for empty string, because "0" is a valid score)
     if ($score === "") {

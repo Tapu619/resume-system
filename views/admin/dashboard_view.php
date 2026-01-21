@@ -159,7 +159,7 @@
                     
                     <td>
                         <a href="<?php echo $resume['file_path']; ?>" target="_blank" style="color: #007bff; text-decoration: none;">
-                            📄 View PDF
+                            View PDF
                         </a>
                     </td>
                     
@@ -254,7 +254,7 @@
         
         // A. Confirmation Alert
         if (!confirm("Are you sure you want to delete this user? This will also delete their resumes and reviews.")) {
-            return; // Stop if they click Cancel
+            return; // Stop if Cancel
         }
 
         // B. Prepare Data
@@ -274,7 +274,6 @@
                     // D. On Success: Remove the row from the table
                     const row = document.getElementById('row_' + userId);
                     if (row) {
-                        //fade out effect 
                         row.style.transition = "opacity 0.5s";
                         row.style.opacity = "0";
                         setTimeout(() => row.remove(), 500); 
@@ -285,7 +284,6 @@
                 }
             } catch (e) {
                 alert("Error processing response. Please check console.");
-                console.log(xhttp.responseText); // For debugging
             }
         };
 
