@@ -6,7 +6,6 @@
     <title>Login - ResumeCheck</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="../assets/css/style.css">
     
     <style>
@@ -171,6 +170,24 @@
             border: 1px solid #fee2e2;
         }
 
+        /* NEW: REMEMBER ME CHECKBOX STYLES */
+        .checkbox-group { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .checkbox-group input { 
+            width: auto; 
+            margin-right: 10px; 
+            cursor: pointer; 
+        }
+        .checkbox-group label { 
+            cursor: pointer; 
+            color: #555; 
+            font-size: 0.95em; 
+            user-select: none; 
+        }
+
         @media (max-width: 900px) {
             .main-content { flex-direction: column; padding: 20px; text-align: center; }
             .hero-text { margin-bottom: 40px; padding-right: 0; }
@@ -225,6 +242,11 @@
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" name="password" id="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="remember_me" id="remember_me">
+                        <label for="remember_me">Remember me</label>
                     </div>
 
                     <button type="submit" name="login_btn" class="btn-login">Sign In</button>

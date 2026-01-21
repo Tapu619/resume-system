@@ -16,13 +16,10 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['assign_btn'])) {
     $resume_id = $_POST['resume_id'];
 
-    
-    // We need to see if it is already reviewed
-    $status_sql = "SELECT status FROM resumes WHERE id = '$resume_id'";
-    $status_result = mysqli_query($conn, $status_sql);
-    $resume_data = mysqli_fetch_assoc($status_result);
+    // Check if the resume is already reviewed
+    $current_status = getResumeStatus($conn, $resume_id);
 
-    if ($resume_data && $resume_data['status'] == 'reviewed') {
+    if ($current_status == 'reviewed') {
         $error = "Error: This resume has already been reviewed. You cannot reassign it.";
     }
     // --- Existing Validation: Check if Reviewer Selected ---

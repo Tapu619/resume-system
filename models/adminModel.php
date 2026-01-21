@@ -56,6 +56,17 @@ function getAllReviewers($conn) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+// Get just the status of a resume
+function getResumeStatus($conn, $resume_id) {
+    $resume_id = mysqli_real_escape_string($conn, $resume_id);
+    
+    $sql = "SELECT status FROM resumes WHERE id = '$resume_id'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+    
+    return $data ? $data['status'] : null;
+}
+
 // 4. Assign a Resume to a Reviewer
 function assignReviewer($conn, $resume_id, $reviewer_id) {
     $sql = "UPDATE resumes SET assigned_to = '$reviewer_id' WHERE id = '$resume_id'";

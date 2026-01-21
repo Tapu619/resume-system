@@ -3,7 +3,26 @@ session_start();
 require_once '../config/db.php';
 require_once '../models/userModel.php';
 
-// 1. If user is already logged in, redirect them to their dashboard
+// --- STEP 0: AUTO-LOGIN (Check Cookies) ---
+// If Session is empty BUT Cookie exists, log them in automatically
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_user'])) {
+    $cookie_id = $_COOKIE['remember_user'];
+
+    // Security check to ensure ID is a number
+    if (is_numeric($cookie_id)) {
+        
+        $user_cookie = getUserById($conn, $cookie_id);
+
+        if ($user_cookie) {
+            // Set Session Variables
+            $_SESSION['user_id'] = $user_cookie['id'];
+            $_SESSION['full_name'] = $user_cookie['full_name'];
+            $_SESSION['role'] = $user_cookie['role'];
+        }
+    }
+}
+
+// 1. If user is already logged in (via Session OR Cookie), redirect them
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] == 'admin') header("Location: admin_dashboard.php");
     elseif ($_SESSION['role'] == 'reviewer') header("Location: reviewer_dashboard.php");
@@ -16,7 +35,6 @@ $error_msg = "";
 // 2. Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
     
-    // Sanitize inputs
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
@@ -33,6 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_btn'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['role'] = $user['role'];
+
+            // --- NEW: SET REMEMBER ME COOKIE ---
+            if (isset($_POST['remember_me'])) {
+                // Set cookie named 'remember_user' with the ID, valid for 1 hour (3600 secs)
+                setcookie('remember_user', $user['id'], time() + 3600, "/");
+            }
 
             // 4. Redirect based on Role
             if ($user['role'] == 'admin') {
